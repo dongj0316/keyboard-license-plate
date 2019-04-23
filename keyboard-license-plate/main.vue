@@ -59,14 +59,13 @@
                       </div>
                     </template>
                     <template v-else>
-                      <div class="item empty" :key="idx">
+                      <div v-if="index === 3 && idx === 10" @click="deleteLetterNumber" class="item empty" :key="idx">
                         <span>0</span>
-                        <!-- 删除按钮 -->
-                        <div
-                          v-if="index === 3 && idx === 10"
-                          @click="deleteLetterNumber"
-                          class="delete">
-                        </div>
+                        <!-- 删除按钮样式 -->
+                        <div class="delete"></div>
+                      </div>
+                      <div v-else class="item empty" :key="idx">
+                        <span>0</span>
                       </div>
                     </template>
                   </template>
@@ -165,7 +164,8 @@ export default {
       province,
       letter,
       type: 0,
-      keyboardVisible: false
+      keyboardVisible: false,
+      deleteTimer: null
     }
   },
   methods: {
@@ -182,14 +182,20 @@ export default {
       this.keyboardVisible = true
     },
     checkLetterNumber (item) {
-      this.$emit('input', this.currentValue + item)
+      const numberVal = this.numberVal + item
+      if (numberVal.length > 7) {
+        return
+      }
+      this.numberVal = numberVal
+      this.currentValue = this.provinceVal + this.numberVal
     },
     deleteLetterNumber () {
       const len = this.numberVal.length
       if (len === 0) {
         this.type = 0
       } else {
-        this.$emit('input', this.provinceVal + this.numberVal.substring(0, len - 1))
+        this.numberVal = this.numberVal.substring(0, len - 1)
+        this.currentValue = this.provinceVal + this.numberVal
       }
     },
     closeKeyboard (event) {
@@ -212,7 +218,10 @@ export default {
       this.valid = valid
     },
     currentValue (val) {
-      this.$emit('input', val)
+      clearInterval(this.deleteTimer)
+      this.deleteTimer = setTimeout(() => {
+        this.$emit('input', val)
+      }, 200)
     }
   }
 }
