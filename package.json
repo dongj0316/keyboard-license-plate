@@ -1,11 +1,22 @@
 {
   "name": "keyboard-license-plate",
   "version": "0.1.0",
-  "private": true,
+  "description": "A license plate number analog keyboard that supports vue",
+  "keyword": [
+    "vue",
+    "keyboard",
+    "license plate number",
+    "License plate"
+  ],
+  "private": false,
+  "main": "dist/keyboard-license-plate.common.js",
+  "license": "MIT",
+  "author": "dj1811",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build-lib": "vue-cli-service build --target lib --name keyboard-license-plate ./keyboard-license-plate/index.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
