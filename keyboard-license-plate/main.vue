@@ -198,6 +198,9 @@ export default {
     focus (type = 0) {
       this.type = type
       this.keyboardVisible = true
+    },
+    blur () {
+      this.keyboardVisible = false
     }
   },
   watch: {
