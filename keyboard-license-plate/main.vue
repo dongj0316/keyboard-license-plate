@@ -1,11 +1,11 @@
 <template>
   <div class="component-keyboard-license-plate">
     <div class="keyboard-value" :style="{zIndex: keyboardVisible ? zIndex + 1 : 'initial'}">
-      <div @click="showProvinceKeyboard" class="keyboard-value__province">
+      <div @click="focus(0)" class="keyboard-value__province">
         <div class="province-val">{{provinceVal}}</div>
         <div class="arrow-down"></div>
       </div>
-      <div @click="showLetterNumberKeyboard" class="keyboard-value__letter-number">
+      <div @click="focus(1)" class="keyboard-value__letter-number">
         <div class="letter-number-val">{{numberVal}}</div>
         <div v-show="keyboardVisible && type === 1" class="keyboard-value__focus-icon">0</div>
         <div class="keyboard-value__placeholder" v-if="!numberVal">{{placeholder}}</div>
@@ -169,17 +169,9 @@ export default {
     }
   },
   methods: {
-    showProvinceKeyboard () {
-      this.type = 0
-      this.keyboardVisible = true
-    },
     checkProvince (item) {
       this.type = 1
       this.$emit('input', item + this.numberVal)
-    },
-    showLetterNumberKeyboard () {
-      this.type = 1
-      this.keyboardVisible = true
     },
     checkLetterNumber (item) {
       const numberVal = this.numberVal + item
@@ -202,6 +194,10 @@ export default {
       if (event.target.className === 'keyboard') {
         this.keyboardVisible = false
       }
+    },
+    focus (type = 0) {
+      this.type = type
+      this.keyboardVisible = true
     }
   },
   watch: {
