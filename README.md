@@ -31,7 +31,7 @@ Vue.use(KeyboardLicensePlate)
 | z-index | Number | 键盘z-index样式值 | N | 5000 |
 | disabled-keys | Array | 禁用按钮值 | N | ['I', 'O'] |
 
-#### Scroller vm instance methods:
+#### instance methods:
 - `focus()` 获取焦点
 - `blur()` 取消焦点
 
