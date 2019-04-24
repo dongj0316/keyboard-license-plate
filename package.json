@@ -16,7 +16,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --name keyboard-license-plate ./keyboard-license-plate/index.js"
+    "build-lib": "vue-cli-service build --target lib --name keyboard-license-plate ./keyboard-license-plate/index.js",
+    "build-demo": "vue-cli-service build --dest demo"
   },
   "dependencies": {
     "core-js": "^2.6.5",
