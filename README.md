@@ -1,6 +1,8 @@
 # keyboard-license-plate
 vue车牌号模拟键盘
 
+[online demo](https://dongj0316.github.io/keyboard-license-plate/demo/)
+
 ## Installation
 
 ## Use
