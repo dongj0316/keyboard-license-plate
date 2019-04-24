@@ -12,15 +12,17 @@
       </div>
     </div>
 
-    <div v-show="keyboardVisible" @click="closeKeyboard" class="keyboard" :style="{zIndex: zIndex}">
-      <div class="keyboard__control">
-        <div class="keyboard__control__handle">
+    <div v-show="keyboardVisible" @click="keyboardVisible = false" class="keyboard-mask" :style="{zIndex: zIndex}"></div>
+
+    <transition name="keyboard-control">
+      <div v-show="keyboardVisible" class="keyboard-control" :style="{zIndex: zIndex + 1}">
+        <div class="keyboard-control__handle">
           <div @click="keyboardVisible = false" class="button-sure">确定</div>
         </div>
         <!-- 省 -->
-        <div v-show="type === 0" class="keyboard__control__province">
+        <div v-show="type === 0" class="keyboard-control__province">
           <template v-for="(cell, index) in province">
-            <div class="keyboard__control__cell" :key="index">
+            <div class="keyboard-control__cell" :key="index">
               <div
                 v-for="(item, idx) in cell"
                 @click="checkProvince(item)"
@@ -33,9 +35,9 @@
           </template>
         </div>
         <!-- 数字、字母 -->
-        <div v-show="type === 1" class="keyboard__control__letter-number">
+        <div v-show="type === 1" class="keyboard-control__letter-number">
           <template v-for="(itemList, index) in letter">
-            <div class="keyboard__control__cell" :class="{'keyboard__control__cell__style-a': index > 1 && index < 4}" :key="index">
+            <div class="keyboard-control__cell" :class="{'keyboard-control__cell__style-a': index > 1 && index < 4}" :key="index">
               <template v-for="(item, idx) in itemList">
                 <template v-if="disabledKeys.includes(item)">
                   <div class="item disabled" :key="idx">
@@ -75,7 +77,7 @@
           </template>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -190,11 +192,6 @@ export default {
         this.currentValue = this.provinceVal + this.numberVal
       }
     },
-    closeKeyboard (event) {
-      if (event.target.className === 'keyboard') {
-        this.keyboardVisible = false
-      }
-    },
     focus (type = 0) {
       this.type = type
       this.keyboardVisible = true
@@ -269,7 +266,7 @@ export default {
       animation: opacity-frame 1.2s infinite;
     }
   }
-  .keyboard {
+  .keyboard-mask {
     position: fixed;
     top: 0;
     left: 0;
@@ -279,103 +276,103 @@ export default {
     font-weight: bold;
     user-select: none;
     overflow: hidden;
-    &__control {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding-bottom: 20px;
-      background: @keyboardBg;
-      &__handle {
-        height: 44px;
-        line-height: 44px;
-        text-align: right;
-        border-top: 1px solid @keyboardBg;
-        background: lighten(@keyboardBg, 10%);
-        .button-sure {
-          display: inline-block;
-          padding: 0 10px;
+  }
+  .keyboard-control {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding-bottom: 20px;
+    background: @keyboardBg;
+    &__handle {
+      height: 44px;
+      line-height: 44px;
+      text-align: right;
+      border-top: 1px solid @keyboardBg;
+      background: lighten(@keyboardBg, 10%);
+      .button-sure {
+        display: inline-block;
+        padding: 0 10px;
+        color: @themeColor;
+      }
+    }
+    &__province {
+      display: block;
+      padding-top: 10px;
+    }
+    &__letter-number {
+      display: block;
+      padding-top: 10px;
+    }
+    &__cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      justify-content: flex-start;
+      height: 44px;
+      line-height: 44px;
+      margin-bottom: 12px;
+      .item {
+        position: relative;
+        flex: 1;
+        margin-right: 6px;
+        text-align: center;
+        border-radius: 4px;
+        background: #fff;
+        border-bottom: 1px solid @keyboardShadow;
+        &.empty {
+          border: none;
+          color: transparent;
+          background: transparent;
+        }
+        &.disabled {
+          color: #969799;
+          background: rgba(255, 255, 255, .6);
+        }
+        &.active {
           color: @themeColor;
         }
+        &:last-child {
+          margin-right: 0;
+        }
+        &:active .tip {
+          display: block;
+        }
       }
-      &__province {
-        display: block;
-        padding-top: 10px;
-      }
-      &__letter-number {
-        display: block;
-        padding-top: 10px;
-      }
-      &__cell {
-        position: relative;
-        display: flex;
-        align-items: center;
-        padding: 0 4px;
-        justify-content: flex-start;
-        height: 44px;
-        line-height: 44px;
-        margin-bottom: 12px;
-        .item {
+      .tip {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: none;
+        &__top {
+          box-sizing: border-box;
           position: relative;
-          flex: 1;
-          margin-right: 6px;
-          text-align: center;
-          border-radius: 4px;
+          top: 2px;
+          margin-left: -30%;
+          width: 160%;
+          height: 58px;
+          font-size: 180%;
+          border-radius: 8px;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+          box-shadow: 0 2px 8px @keyboardDark;
           background: #fff;
-          border-bottom: 1px solid @keyboardShadow;
-          &.empty {
-            border: none;
-            color: transparent;
-            background: transparent;
-          }
-          &.disabled {
-            color: #969799;
-            background: rgba(255, 255, 255, .6);
-          }
-          &.active {
-            color: @themeColor;
-          }
-          &:last-child {
-            margin-right: 0;
-          }
-          &:active .tip {
-            display: block;
-          }
         }
-        .tip {
-          position: absolute;
-          bottom: 0;
-          left: 0;
+        &__bottom {
+          box-sizing: border-box;
+          position: relative;
           width: 100%;
-          display: none;
-          &__top {
-            box-sizing: border-box;
-            position: relative;
-            top: 2px;
-            margin-left: -30%;
-            width: 160%;
-            height: 58px;
-            font-size: 180%;
-            border-radius: 8px;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 2px 8px @keyboardDark;
-            background: #fff;
-          }
-          &__bottom {
-            box-sizing: border-box;
-            position: relative;
-            width: 100%;
-            height: 50px;
-            box-shadow: 0 6px 6px @keyboardDark;
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-            background: #fff;
-          }
+          height: 50px;
+          box-shadow: 0 6px 6px @keyboardDark;
+          border-bottom-left-radius: 3px;
+          border-bottom-right-radius: 3px;
+          background: #fff;
         }
-        &__style-a .item:first-child, &__style-a .item:last-child {
-          flex: 0.5;
-        }
+      }
+      &__style-a .item:first-child, &__style-a .item:last-child {
+        flex: 0.5;
       }
     }
     .delete {
@@ -429,6 +426,14 @@ export default {
   100% {
     opacity: 0;
   }
+}
+
+.keyboard-control-enter-active, .keyboard-control-leave-active {
+  transition-timing-function: linear;
+  transition-duration: 200ms;
+}
+.keyboard-control-enter, .keyboard-control-leave-to {
+  transform: translate(0, 100%);
 }
 </style>
 
