@@ -11,7 +11,6 @@ $ npm install keyboard-license-plate
 
 ```js
 import Vue from 'vue'
-import KeyboardLicensePlate from 'keyboard-license-plate/dist/keyboard-license-plate.css'
 import KeyboardLicensePlate from 'keyboard-license-plate'
 
 Vue.use(KeyboardLicensePlate)
