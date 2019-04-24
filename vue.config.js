@@ -3,5 +3,9 @@ module.exports = {
     index: {
       entry: 'example/main.js'
     }
-  }
+  },
+  css: {
+    extract: false
+  },
+  productionSourceMap: false
 }
