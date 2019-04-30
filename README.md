@@ -8,7 +8,7 @@ vue车牌号模拟键盘
 ## Use
 
 ```bash
-$ npm install keyboard-license-plate
+$ npm install keyboard-license-plate -S
 ```
 
 ```js
