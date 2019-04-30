@@ -10,6 +10,10 @@
   ],
   "private": false,
   "main": "dist/keyboard-license-plate.common.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dongj0316/keyboard-license-plate"
+  },
   "license": "MIT",
   "author": "dj1811",
   "scripts": {
