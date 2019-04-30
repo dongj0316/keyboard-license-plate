@@ -26,7 +26,7 @@
               <div
                 v-for="(item, idx) in cell"
                 @click="checkProvince(item)"
-                class="item"
+                class="keyboard-control__cell__item"
                 :class="{empty: !item, active: provinceVal === item}"
                 :key="idx">
                 {{item}}
@@ -40,35 +40,22 @@
             <div class="keyboard-control__cell" :class="{'keyboard-control__cell__style-a': index > 1 && index < 4}" :key="index">
               <template v-for="(item, idx) in itemList">
                 <template v-if="disabledKeys.includes(item)">
-                  <div class="item disabled" :key="idx">
+                  <div class="keyboard-control__cell__item disabled" :key="idx">
                     <span>{{item}}</span>
                   </div>
                 </template>
                 <template v-else>
                   <template v-if="numberVal.length === 0 && (index === 0 || index === 4)">
-                    <div class="item disabled" :class="{empty: !item}" :key="idx">
+                    <div class="keyboard-control__cell__item" :class="{empty: !item, disabled: !!item}" :key="idx">
                       <span>{{item}}</span>
                     </div>
                   </template>
                   <template v-else>
-                    <template v-if="item">
-                      <div @click="checkLetterNumber(item)" class="item" :class="{empty: !item}" :key="idx">
-                        <span>{{item || '0'}}</span>
-                        <div v-if="item" class="tip">
-                          <div class="tip__top">{{item}}</div>
-                          <div class="tip__bottom"></div>
-                        </div>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div v-if="index === 3 && idx === 10" @click="deleteLetterNumber" class="item empty" :key="idx">
-                        <span>0</span>
-                        <!-- 删除按钮样式 -->
-                        <div class="delete"></div>
-                      </div>
-                      <div v-else class="item empty" :key="idx">
-                        <span>0</span>
-                      </div>
+                    <div @click="checkLetterNumber(item)" class="keyboard-control__cell__item" :class="{empty: !item}" :key="idx">
+                      <span>{{item || '0'}}</span>
+                    </div>
+                    <template v-if="index === 3 && idx === 10">
+                      <div @click="deleteLetterNumber" class="keyboard-control__delete" :key="idx + 1"></div>
                     </template>
                   </template>
                 </template>
@@ -245,7 +232,6 @@ export default {
       display: flex;
       align-items: center;
       margin-right: 5px;
-      font-weight: bold;
     }
     &__letter-number {
       position: relative;
@@ -273,20 +259,28 @@ export default {
     width: 100%;
     height: 100%;
     font-size: inherit;
-    font-weight: bold;
-    user-select: none;
     overflow: hidden;
   }
   .keyboard-control {
+    box-sizing: content-box;
     position: fixed;
     bottom: 0;
     left: 0;
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    height: 38%;
+    padding-top: 40px;
     padding-bottom: 20px;
+    font-weight: bold;
     background: @keyboardBg;
     &__handle {
-      height: 44px;
-      line-height: 44px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
       text-align: right;
       border-top: 1px solid @keyboardBg;
       background: lighten(@keyboardBg, 10%);
@@ -297,25 +291,35 @@ export default {
       }
     }
     &__province {
-      display: block;
+      flex: 1;
+      display: flex;
       padding-top: 10px;
+      flex-direction: column;
     }
     &__letter-number {
-      display: block;
+      flex: 1;
+      display: flex;
       padding-top: 10px;
+      flex-direction: column;
     }
     &__cell {
       position: relative;
+      flex: 1;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       padding: 0 4px;
+      margin-bottom: 8px;
       justify-content: flex-start;
-      height: 44px;
-      line-height: 44px;
-      margin-bottom: 12px;
-      .item {
+      user-select: none;
+      &:last-child {
+        margin-bottom: 8px;
+      }
+      &__item {
         position: relative;
         flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin-right: 6px;
         text-align: center;
         border-radius: 4px;
@@ -336,60 +340,25 @@ export default {
         &:last-child {
           margin-right: 0;
         }
-        &:active .tip {
+        &:not(.empty):active .tip {
           display: block;
-        }
-      }
-      .tip {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        display: none;
-        &__top {
-          box-sizing: border-box;
-          position: relative;
-          top: 2px;
-          margin-left: -30%;
-          width: 160%;
-          height: 58px;
-          font-size: 180%;
-          border-radius: 8px;
-          border-bottom-left-radius: 20px;
-          border-bottom-right-radius: 20px;
-          box-shadow: 0 2px 8px @keyboardDark;
-          background: #fff;
-        }
-        &__bottom {
-          box-sizing: border-box;
-          position: relative;
-          width: 100%;
-          height: 50px;
-          box-shadow: 0 6px 6px @keyboardDark;
-          border-bottom-left-radius: 3px;
-          border-bottom-right-radius: 3px;
-          background: #fff;
         }
       }
       &__style-a .item:first-child, &__style-a .item:last-child {
         flex: 0.5;
       }
     }
-    .delete {
+    &__delete {
+      box-sizing: border-box;
       position: absolute;
       top: 0;
-      right: 0;
-      width: 300%;
+      right: 4px;
+      width: 15%;
       height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       border-radius: 4px;
-      text-align: center;
       border-bottom: 1px solid @keyboardShadow;
-      background: url(@deleteImg) center center / auto 60% no-repeat;
+      background: url(@deleteImg) center center / auto 50% no-repeat;
       background-color: @keyboardDark;
-      color: #000;
       &:active {
         background-color: #fff;
       }
