@@ -69,6 +69,9 @@
 </template>
 
 <script>
+function flat(target) {
+  return target.reduce((item, result) => result.concat(item), [])
+}
 const province = [
   ['京', '津', '沪', '渝', '冀', '豫', '云'],
   ['辽', '黑', '湘', '皖', '鲁', '新', '苏'],
@@ -83,8 +86,8 @@ const letter = [
   ['', '', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '', ''],
   ['', '', '港', '澳', '学', '警', '领', '使', '', '']
 ]
-const provinceFormat = province.flat()
-const letterFormat = letter.flat()
+const provinceFormat = flat(province)
+const letterFormat = flat(letter)
 const reg7 = /^[京沪浙苏粤鲁晋冀豫川渝辽吉黑皖鄂湘赣闽陕甘宁蒙津贵云桂琼青新藏]{1}[a-hj-np-zA-HJ-NP-Z]{1}[a-hj-np-zA-HJ-NP-Z0-9]{4}[a-hj-np-zA-HJ-NP-Z0-9\u4e00-\u9fa5]$/g
 const reg8 = /^[京沪浙苏粤鲁晋冀豫川渝辽吉黑皖鄂湘赣闽陕甘宁蒙津贵云桂琼青新藏]{1}[a-hj-np-zA-HJ-NP-Z]{1}([0-9]{5}[d|f|D|F]|[d|f|D|F][a-hj-np-zA-HJ-NP-Z0-9][0-9]{4})$/g
 
