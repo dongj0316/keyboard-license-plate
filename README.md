@@ -37,6 +37,9 @@ Vue.use(KeyboardLicensePlate)
 - `focus()` 获取焦点
 - `blur()` 取消焦点
 
+#### instance attributes:
+- `valid` 布尔值，表示车牌号码格式是否正确
+
 ## Local setup
 
 ```
